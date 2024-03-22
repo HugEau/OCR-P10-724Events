@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useData } from "../../contexts/DataContext";
 import { getMonth } from "../../helpers/Date";
-
 import "./style.scss";
 
 const Slider = () => {
@@ -11,18 +10,22 @@ const Slider = () => {
   const byDateDesc = data?.focus.sort((evtA, evtB) =>
     new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
   );
+  
   const nextCard = () => {
     setTimeout(
       () => {
         setIndex(index < byDateDesc.length-1 ? index + 1 : 0);
-        setRadioIndex(index);
+        setRadioIndex(radioIndex === 2 ? 0 : radioIndex + 1);
+        console.log(radioIndex, index)
       },
       5000
     );
   };
+  
   useEffect(() => {
     nextCard();
   });
+  
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
@@ -50,6 +53,8 @@ const Slider = () => {
                   type="radio"
                   name="radio-button"
                   checked={radioIndex === radioIdx}
+                  id={`radio-${radioIdx}`}
+                  onClick={() => {setIndex(radioIdx); setRadioIndex(radioIdx)}}
                 />
               ))}
             </div>
