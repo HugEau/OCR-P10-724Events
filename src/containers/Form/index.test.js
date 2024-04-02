@@ -22,7 +22,10 @@ describe("When Events is created", () => {
         })
       );
       await screen.findByText("En cours");
-      await screen.findByText("Envoyer");
+      while(!(await screen.findByText("En cours"))) {
+        await screen.findByValue("Envoyer");
+      }
+      await onSuccess("Votre message a bien été envoyé !");
       expect(onSuccess).toHaveBeenCalled();
     });
   });

@@ -19,7 +19,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "lint": "eslint .eslintrc.js ./src",
-    "format": "prettier ./src --write"
+    "format": "prettier ./src --write",
+    "test:watch": "react-scripts test --watchAll=true"
   },
   "eslintConfig": {
     "extends": [

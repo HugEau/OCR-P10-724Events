@@ -14,7 +14,6 @@ const EventList = () => {
   const [type, setType] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const filteredEventsType = (type ? data?.events.filter(event => event.type === type) : data?.events) || [];
-  console.log(filteredEventsType)
   const filteredEvents = filteredEventsType.filter((event, index) => {
     if (
       (currentPage - 1) * PER_PAGE <= index &&
@@ -41,7 +40,7 @@ const EventList = () => {
           <Select
             selection={Array.from(typeList)}
             //Ajout de value dans onChange dans Select
-            onChange={(value) => {(value ? changeType(value) : changeType(null)); console.log(filteredEvents);}}
+            onChange={(value) => {(value ? changeType(value) : changeType(null));}}
           />
           <div id="events" className="ListContainer">
             {filteredEvents.map((event) => (
