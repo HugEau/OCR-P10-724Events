@@ -10,31 +10,33 @@ const Slider = () => {
   const byDateDesc = data?.focus.sort((evtA, evtB) =>
     new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
   );
-  
-  const nextCard = () => {
-    setTimeout(
-      () => {
-        setIndex(index < byDateDesc.length-1 ? index + 1 : 0);
-        setRadioIndex(radioIndex === 2 ? 0 : radioIndex + 1);
-        console.log(radioIndex, index)
-      },
-      5000
-    );
+  let timeoutId;
+
+  const nextCard = (ifIdx) => {
+    timeoutId = setTimeout(() => {
+      setIndex((prevIndex) => (prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0));
+      setRadioIndex((prevRadioIndex) => (prevRadioIndex === 2 ? 0 : prevRadioIndex + 1));
+    }, 5000);
+    if (ifIdx) {
+      setRadioIndex(ifIdx);
+    }
   };
-  
+
   useEffect(() => {
     nextCard();
-  });
-  
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [index]);
+
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
         <>
           <div
             key={event.title}
-            className={`SlideCard SlideCard--${
-              index === idx ? "display" : "hide"
-            }`}
+            className={`SlideCard SlideCard--${index === idx ? "display" : "hide"}`}
           >
             <img src={event.cover} alt="forum" />
             <div className="SlideCard__descriptionContainer">
@@ -54,7 +56,12 @@ const Slider = () => {
                   name="radio-button"
                   checked={radioIndex === radioIdx}
                   id={`radio-${radioIdx}`}
-                  onClick={() => {setIndex(radioIdx); setRadioIndex(radioIdx)}}
+                  onChange={() => {
+                    clearTimeout(timeoutId);
+                    setIndex(radioIdx);
+                    nextCard(radioIdx);
+                    setRadioIndex(radioIdx);
+                  }}
                 />
               ))}
             </div>
