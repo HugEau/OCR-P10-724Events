@@ -17,25 +17,28 @@ const Slider = () => {
       setIndex((prevIndex) => (prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0));
       setRadioIndex((prevRadioIndex) => (prevRadioIndex === 2 ? 0 : prevRadioIndex + 1));
     }, 5000);
-    if (ifIdx) {
+    if (ifIdx !== undefined) {
       setRadioIndex(ifIdx);
     }
   };
 
   useEffect(() => {
-    nextCard();
-
+    if (byDateDesc) {
+      nextCard();
+    }
+    
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [index]);
+    // eslint-disable-next-line
+  }, [index, byDateDesc]);
 
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
         <>
           <div
-            key={event.title}
+            key={`slide-${idx}`}
             className={`SlideCard SlideCard--${index === idx ? "display" : "hide"}`}
           >
             <img src={event.cover} alt="forum" />
@@ -50,19 +53,18 @@ const Slider = () => {
           <div className="SlideCard__paginationContainer">
             <div className="SlideCard__pagination">
               {byDateDesc.map((_, radioIdx) => (
-                <input
-                  key={`radio-${radioIdx}`}
-                  type="radio"
-                  name="radio-button"
-                  checked={radioIndex === radioIdx}
-                  id={`radio-${radioIdx}`}
-                  onChange={() => {
-                    clearTimeout(timeoutId);
-                    setIndex(radioIdx);
-                    nextCard(radioIdx);
-                    setRadioIndex(radioIdx);
-                  }}
-                />
+                  <input
+                    key={`radio-${radioIdx}`}
+                    type="radio"
+                    name="radio-button"
+                    checked={radioIndex === radioIdx}
+                    id={`radio-${radioIdx}`}
+                    onChange={() => {
+                      clearTimeout(timeoutId);
+                      setIndex(radioIdx);
+                      nextCard(radioIdx);
+                    }}
+                  />
               ))}
             </div>
           </div>
